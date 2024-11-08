@@ -114,6 +114,12 @@ Options:
     def _close_code_block(self):
         print("```")
 
+    def _code_block(self, text):
+        self._open_code_block()
+        print(text)
+        self._close_code_block()
+
+
     def _execute_command(self, command, full_filepath=None):
         if full_filepath is None:
             full_filepath = self.full_filepath
@@ -162,15 +168,19 @@ Options:
             sys.stdout = f
 
             self._header("Poetry Version")
-            print(self.reports["version"])
+            self._code_block(self.reports["version"])
+
             self._header("Poetry Configuration")
-            print(self.reports["configuration"])
+            self._code_block(self.reports["configuration"])
+
             self._header("Python Sysconfig")
-            print(self.reports["sysconfig"])
+            self._code_block(self.reports["sysconfig"])
+
             if self.option("include-pyproject-toml"):
                 pass #FIXME
+            
             self._header("Runtime Logs")
-            print(self.reports["runtime_logs"])
+            self._code_block(self.reports["runtime_logs"])
 
             sys.stdout = self.default_stdout
 

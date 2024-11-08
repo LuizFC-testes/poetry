@@ -97,7 +97,7 @@ COMMANDS = [
     "source remove",
     "source show",
     # Dummy command
-    "foo",
+    "dummy",
 ]
 
 

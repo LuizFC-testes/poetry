@@ -17,8 +17,8 @@ if TYPE_CHECKING:
     from cleo.io.inputs.option import Option
     from poetry.core.constraints.version import Version
 
-class FooCommand(Command):
-    name = "foo"
+class DummyCommand(Command):
+    name = "dummy"
     description = (
         "Just a dummy command for understanding command coding"
     )
@@ -48,7 +48,7 @@ It has an option "caps", short "c", that makes the passed argument to be display
     def handle(self) -> int:
         # Print a message to the terminal
         self.line(
-            text="Hey! You called the mighty Foo Command!"
+            text="Hey! You called the mighty Dummy Command!"
         )
 
         # Get the argument passed (or not)
@@ -56,7 +56,7 @@ It has an option "caps", short "c", that makes the passed argument to be display
 
         if message:
             # Get the text of the message
-            txt_msg = message.to_string()
+            txt_msg = message
 
             # Check if the option was passed
             if self.option("caps"):

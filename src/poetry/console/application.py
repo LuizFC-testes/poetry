@@ -96,6 +96,8 @@ COMMANDS = [
     "source add",
     "source remove",
     "source show",
+    # Dummy command
+    "foo",
 ]
 
 

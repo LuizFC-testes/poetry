@@ -13,6 +13,7 @@ from poetry.console.commands.command import Command
 
 import os
 import sys
+from threading import Thread
 
 if TYPE_CHECKING:
     from cleo.io.inputs.argument import Argument
@@ -54,6 +55,8 @@ Options:
 - include-pyproject-toml:
     Indicates that the example pyproject.toml must be included
 """
+
+    reports = {}
 
     filename = "bug-report.md"
 
@@ -105,49 +108,72 @@ Options:
         """
         print(f"*{text}*")
 
+    def _open_code_block(self):
+        print("```")
+
+    def _close_code_block(self):
+        print("```")
+
+    def _execute_command(self, command, full_filepath=None):
+        if full_filepath is None:
+            full_filepath = self.full_filepath
+            
+        os.system(f"{command} > {full_filepath}")
+        with open(full_filepath, 'r') as f:
+            output = f.read()
+
+        return output.strip()
+    
     def _report_version(self):
-        with open(self.full_filepath, 'w') as f:
-            sys.stdout = f
-            self._header("Poetry Version")
-            os.system(f"poetry --version >> {self.full_filepath}")
-            self._newline()
-            sys.stdout = self.default_stdout
+        command = "poetry --version"
+        self.reports["version"] = self._execute_command(command)
 
     def _report_configuration(self):
-        with open(self.full_filepath, 'a') as f:
-            sys.stdout = f
-            self._header("Poetry Configuration")
-            os.system(f"poetry config --list >> {self.full_filepath}")
-            self._newline()
-            sys.stdout = self.default_stdout
+        command = "poetry config --list"
+        self.reports["configuration"] = self._execute_command(command)
 
     def _report_sysconfig(self):
-        with open(self.full_filepath, 'a') as f:
-            sys.stdout = f
-            self._header("Python Sysconfig")
-            os.system(f"python -m sysconfig >> {self.full_filepath}")
-            self._newline()
-            sys.stdout = self.default_stdout
+        command = "python -m sysconfig"
+        self.reports["sysconfig"] = self._execute_command(command)
 
     def _report_pyproject(self):
-        pass
+        if self.option("include-pyproject-toml"):
+            pass #FIXME
 
     def _report_runtime_logs(self):
-        command : str = self.argument("report-command")
-        with open(self.full_filepath, 'a') as f:
-            sys.stdout = f
-            self._header("Poetry Runtime Logs")
-            os.system(f"poetry -vvv {command} >> {self.full_filepath}")
-            self._newline()
-            sys.stdout = self.default_stdout
+        command_exec : str = self.argument("report-command")
+        command = f"poetry -vvv {command_exec}"
+        self.reports["runtime_logs"] = self._execute_command(command)
 
     def _report_all(self):
-        self._report_version()
-        self._report_configuration()
-        self._report_sysconfig()
-        if self.option("include-pyproject-toml"):
-            self._report_pyproject()
-        self._report_runtime_logs()
+        threads = [
+            Thread(target=self._report_version),
+            Thread(target=self._report_configuration),
+            Thread(target=self._report_sysconfig),
+            Thread(target=self._report_pyproject),
+            Thread(target=self._report_runtime_logs)
+        ]
+
+        for t in threads:
+            t.start()
+            t.join()
+
+        with open(self.full_filepath, "w") as f:
+            sys.stdout = f
+
+            self._header("Poetry Version")
+            print(self.reports["version"])
+            self._header("Poetry Configuration")
+            print(self.reports["configuration"])
+            self._header("Python Sysconfig")
+            print(self.reports["sysconfig"])
+            if self.option("include-pyproject-toml"):
+                pass #FIXME
+            self._header("Runtime Logs")
+            print(self.reports["runtime_logs"])
+
+            sys.stdout = self.default_stdout
+
 
     def handle(self) -> int:
 

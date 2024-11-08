@@ -1,8 +1,8 @@
 
 # Poetry Version
+Poetry (version 2.0.0.dev0)
 
-
-0.dev0)
+# Poetry Configuration
 cache-dir = "/home/luiz/.cache/pypoetry"
 installer.max-workers = null
 installer.no-binary = null
@@ -21,9 +21,7 @@ virtualenvs.path = "{cache-dir}/virtualenvs"  # /home/luiz/.cache/pypoetry/virtu
 virtualenvs.prompt = "{project_name}-py{python_version}"
 virtualenvs.use-poetry-python = false
 
-# Poetry Configuration
-
-
+# Python Sysconfig
 Platform: "linux-x86_64"
 Python version: "3.10"
 Current installation scheme: "posix_prefix"
@@ -765,12 +763,6 @@ Variables:
 	srcdir = "/usr/lib/python3.10/config-3.10-x86_64-linux-gnu"
 	userbase = "/home/luiz/.local"
 
-# Python Sysconfig
-
-
+# Runtime Logs
 Loading configuration file /home/luiz/.config/pypoetry/config.toml
 poetry 2.0.0.dev0
-
-# Poetry Runtime Logs
-
-

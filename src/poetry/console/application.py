@@ -39,9 +39,16 @@ if TYPE_CHECKING:
 
 def load_command(name: str) -> Callable[[], Command]:
     def _load() -> Command:
+        # Build the path to the file with the respective command script
+        # Main module: poetry.console.commands
+        # For every word in the command name, there must be a new subdirectory
+        # Final word of the "name" argument has the name of the script file (.py)
         words = name.split(" ")
+        # Import the module containing the Command subclass relative to the input name
         module = import_module("poetry.console.commands." + ".".join(words))
+        # Accessing the aforementioned Command subclass
         command_class = getattr(module, "".join(c.title() for c in words) + "Command")
+        # Instantiating the class and returning the generated object
         command: Command = command_class()
         return command
 

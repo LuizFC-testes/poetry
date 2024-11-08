@@ -96,6 +96,8 @@ COMMANDS = [
     "source add",
     "source remove",
     "source show",
+    # Report command
+    "report",
     # Dummy command
     "dummy",
 ]

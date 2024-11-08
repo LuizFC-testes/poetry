@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 class ReportCommand(Command):
     name = "report"
     description = (
-        "Just a dummy command for understanding command coding"
+        "Automatic generation of metadata to fill in Bug Reports"
     )
 
     arguments: ClassVar[list[Argument]] = [
@@ -178,7 +178,7 @@ Options:
 
             if self.option("include-pyproject-toml"):
                 pass #FIXME
-            
+
             self._header("Runtime Logs")
             self._code_block(self.reports["runtime_logs"])
 

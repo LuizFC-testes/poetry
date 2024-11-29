@@ -56,7 +56,7 @@ Options:
 
     filename = "bug-report.md"
 
-    report_file = None
+    report_file = sys.stdout
 
     def _get_filepath(self) -> str:
         """

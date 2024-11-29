@@ -1,28 +1,24 @@
 from __future__ import annotations
 
+import os
+
 from typing import TYPE_CHECKING
-from typing import Any
 from typing import ClassVar
 
 from cleo.helpers import argument
 from cleo.helpers import option
-from poetry.core.version.exceptions import InvalidVersionError
-from tomlkit.toml_document import TOMLDocument
 
 from poetry.console.commands.command import Command
 
-import os
 
 if TYPE_CHECKING:
     from cleo.io.inputs.argument import Argument
     from cleo.io.inputs.option import Option
-    from poetry.core.constraints.version import Version
+
 
 class DummyCommand(Command):
     name = "dummy"
-    description = (
-        "Just a dummy command for understanding command coding"
-    )
+    description = "Just a dummy command for understanding command coding"
 
     arguments: ClassVar[list[Argument]] = [
         argument(
@@ -35,13 +31,13 @@ class DummyCommand(Command):
         option(
             long_name="caps",
             short_name="c",
-            description="Output the version number only"
+            description="Output the version number only",
         ),
         option(
             long_name="display",
             short_name="d",
-            description="Displays the installed poetry version"
-        )
+            description="Displays the installed poetry version",
+        ),
     ]
 
     help = """\
@@ -53,9 +49,7 @@ It has an option "caps", short "c", that makes the passed argument to be display
 
     def handle(self) -> int:
         # Print a message to the terminal
-        self.line(
-            text="Hey! You called the mighty Dummy Command!"
-        )
+        self.line(text="Hey! You called the mighty Dummy Command!")
 
         # Get the argument passed (or not)
         message = self.argument("message")
@@ -68,9 +62,7 @@ It has an option "caps", short "c", that makes the passed argument to be display
             if self.option("caps"):
                 txt_msg = txt_msg.upper()
 
-            self.line(
-                text=txt_msg
-            )
+            self.line(text=txt_msg)
 
         if self.option("display"):
             # Calls the command line above

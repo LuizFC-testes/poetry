@@ -74,12 +74,10 @@ The <c1>init</c1> command creates a basic <comment>pyproject.toml</> file in the
 
         project_path = Path.cwd()
 
-        if self.io.input.option("directory"):
-            project_path = Path(self.io.input.option("directory"))
+        if self.io.input.option("project"):
+            project_path = Path(self.io.input.option("project"))
             if not project_path.exists() or not project_path.is_dir():
-                self.line_error(
-                    "<error>The --directory path is not a directory.</error>"
-                )
+                self.line_error("<error>The --project path is not a directory.</error>")
                 return 1
 
         return self._init_pyproject(project_path=project_path)
@@ -303,7 +301,7 @@ The <c1>init</c1> command creates a basic <comment>pyproject.toml</> file in the
     def _determine_requirements(
         self,
         requires: list[str],
-        allow_prereleases: bool = False,
+        allow_prereleases: bool | None = None,
         source: str | None = None,
         is_interactive: bool | None = None,
     ) -> list[dict[str, Any]]:
@@ -440,7 +438,7 @@ The <c1>init</c1> command creates a basic <comment>pyproject.toml</> file in the
         self,
         name: str,
         required_version: str | None = None,
-        allow_prereleases: bool = False,
+        allow_prereleases: bool | None = None,
         source: str | None = None,
     ) -> tuple[str, str]:
         from poetry.version.version_selector import VersionSelector

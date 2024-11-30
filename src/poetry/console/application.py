@@ -98,8 +98,6 @@ COMMANDS = [
     "source show",
     # Report command
     "report",
-    # Dummy command
-    "dummy",
 ]
 
 

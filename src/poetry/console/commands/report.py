@@ -70,6 +70,16 @@ Options:
     def _get_full_filepath(self) -> str:
         return os.path.join(self._get_filepath(), self.filename)
 
+    def _print(self, text: str):
+        """
+        Prints a text and add a newline to end, mimicking python print()
+
+        Parameters:
+        - text : str
+            Text to be printed
+        """
+        self.report_file.write(text + "\n")
+
     def _header(self, text: str, level: int = 1) -> None:
         """
         Prints a text formatted as a markdown header to stdout
@@ -80,11 +90,11 @@ Options:
         - level : int
             Level of the header
         """
-        self.report_file.write("\n" + "#" * level + " " + text)
+        self._print("\n" + "#" * level + " " + text)
 
     def _newline(self) -> None:
         """Prints a newline character to stdout"""
-        self.report_file.write("\n")
+        self._print("\n")
 
     def _bold(self, text: str) -> None:
         """
@@ -94,7 +104,7 @@ Options:
         - text : str
             Text to be printed
         """
-        self.report_file.write(f"**{text}**")
+        self._print(f"**{text}**")
 
     def _italic(self, text: str) -> None:
         """
@@ -104,17 +114,17 @@ Options:
         - text : str
             Text to be printed
         """
-        self.report_file.write(f"*{text}*")
+        self._print(f"*{text}*")
 
     def _open_code_block(self) -> None:
-        self.report_file.write("```")
+        self._print("```")
 
     def _close_code_block(self) -> None:
-        self.report_file.write("```")
+        self._print("```")
 
     def _code_block(self, text: str) -> None:
         self._open_code_block()
-        self.report_file.write(text)
+        self._print(text)
         self._close_code_block()
 
     def _execute_command(self, command: str, full_filepath: str | None = None) -> str:
